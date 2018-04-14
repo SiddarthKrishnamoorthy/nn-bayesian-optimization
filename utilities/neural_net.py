@@ -29,13 +29,13 @@ class NeuralNet(object):
         valid_set = [dataset[valid, :-1], dataset[valid, -1:]]
         
         e = theanets.Experiment(theanets.feedforward.Regressor,
-                                layers=architecture,
-                                optimize='sgd',
-                                hidden_activation='tanh', 
-                                output_activation='linear',
-                                learning_rate=0.01)
+                                layers=architecture)
+                                # optimize='sgd')
+                                # hidden_activation='tanh', 
+                                # output_activation='linear')
+                                # learning_rate=0.01)
         
-        e.train(train_set, valid_set)
+        e.train(train_set, valid_set, learning_rate=0.01, hidden_activation='tanh', output_activation='linear', algo='sgd')
         self.e = e
 
     def extract_params(self):

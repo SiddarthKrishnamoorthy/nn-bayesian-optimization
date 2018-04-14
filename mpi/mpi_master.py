@@ -61,7 +61,8 @@ def master_process(print_statements):
 
         if tag == WORKER_DONE:
             # data is a (1, m) array
-            if dataset == None: 
+            print(dataset)
+            if dataset is None: 
                 dataset = data
 
             else:
