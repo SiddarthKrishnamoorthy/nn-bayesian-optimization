@@ -34,9 +34,11 @@ class NeuralNet(object):
                                 # hidden_activation='tanh', 
                                 # output_activation='linear')
                                 # learning_rate=0.01)
-        
+        print("network",e.network)
+        #  print(self.e.network)
         e.train(train_set, valid_set, learning_rate=0.01, hidden_activation='tanh', output_activation='linear', algo='sgd')
         self.e = e
+        print(self.e.network)
 
     def extract_params(self):
         architecture = self.__architecture

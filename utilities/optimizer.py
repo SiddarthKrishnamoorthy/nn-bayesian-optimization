@@ -29,7 +29,10 @@ class Optimizer(object):
         neural_net = nn.NeuralNet(self.__architecture, self.__dataset)
         neural_net.train()
         self.__W, self.__B = neural_net.extract_params()
-        self.__nn_pred = neural_net.e.network(self.__domain)
+        # print(neural_net.e.network.predict(self.__domain))
+        # print(self.__domain)
+        # neural_net.e.network(self.__domain)
+        self.__nn_pred = neural_net.e.network.predict(self.__domain)
 
         # Extract features
         train_X = self.__dataset[:, :-1]

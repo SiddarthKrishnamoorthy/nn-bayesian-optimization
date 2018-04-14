@@ -21,7 +21,7 @@ def trainer_process(print_statements):
             if print_statements:
                 print "TRAINER: Received from master, starting new neural net"
 
-            if dataset == None:
+            if dataset is None:
                 dataset = new_data
 
             else:
