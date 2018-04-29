@@ -6,9 +6,11 @@ import numpy as np
 
 def sample_b_k(x_t, y_t, z, t, k, beta, sigma_beta, B):
     #B_k is B without the kth row
-    print("task:", t)
-    print("k:", k)
-    B_k = np.delete(B, (t), axis=0) 
+    # print("task:", t)
+    # print("k:", k)
+    B_k = np.delete(B, (t), axis=0)
+    # print("x_t", x_t)
+    # print("Z", z)
     x_hat = z[t, k] * x_t
     sub = np.matmul(x_t,  np.transpose(B_k))
     z_temp = np.delete(z[t], (k), axis=0)
@@ -17,23 +19,39 @@ def sample_b_k(x_t, y_t, z, t, k, beta, sigma_beta, B):
     sub = np.matmul(sub, np.transpose(z_temp))
     y_hat = y_t - sub
     variance = np.linalg.inv(beta * np.matmul(np.transpose(x_hat), x_hat) + sigma_beta)
-    mean = np.matmul(variance, beta * np.matmul(np.transpose(x_hat), y_hat))
+    mean = np.transpose(np.matmul(variance, beta * np.matmul(np.transpose(x_hat), y_hat)))[0]
     # return mean, variance
-    return np.random.normal(mean, variance)
+    # min_eig = np.min(np.real(np.linalg.eigvals(variance)))
+    # if min_eig < 0:
+    #     variance -= 10*min_eig * np.eye(*variance.shape)
+    # print("mu",mean)
+    # print("sigma",variance)
+    return np.random.multivariate_normal(mean, variance)
 
-def sample_
+def sample_z_t(x_t, y_t, z, t, k, beta, sigma_z, B):
+    x_hat = np.matmul(x_t, np.transpose(B))
+    print(x_hat)
+    variance = np.linalg.inv(beta* np.matmul(np.transpose(x_hat), x_hat) + sigma_z)
+    mean = np.transpose(np.matmul(variance, beta * np.matmul(np.transpose(x_hat), y_t)))[0]
+    print("mean", mean)
+    return np.random.multivariate_normal(mean, variance)
+    # print("reached here")
 
 
 n = 3
 d = 2
 t = 4
 k = 5
-x_t = np.random.random((n,d))
-y_t = np.random.random((n,1))
+x_t = np.random.random((1,d))
+y_t = np.random.random((1,1))
 z = np.random.random((t,k))
 B = np.random.random((k,d))
 # print(x_t)
 # print(z)
 # print(B)
 sigma_beta = np.random.random((d,d))
-sample_b_k(x_t, y_t, z, 2, 2, 1, sigma_beta, B)
+sigma_z = np.random.random((k,k))
+print("b samples", sample_b_k(x_t, y_t, z, 2, 2, 1, sigma_beta, B))
+print("z samples", sample_z_t(x_t, y_t, z, 2, 2, 1, sigma_z, B))
+
+
