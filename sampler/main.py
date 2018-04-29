@@ -18,7 +18,10 @@ def sample_b_k(x_t, y_t, z, t, k, beta, sigma_beta, B):
     y_hat = y_t - sub
     variance = np.linalg.inv(beta * np.matmul(np.transpose(x_hat), x_hat) + sigma_beta)
     mean = np.matmul(variance, beta * np.matmul(np.transpose(x_hat), y_hat))
-    return mean, variance
+    # return mean, variance
+    return np.random.normal(mean, variance)
+
+def sample_
 
 
 n = 3
