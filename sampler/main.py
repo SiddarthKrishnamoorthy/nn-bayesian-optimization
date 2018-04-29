@@ -19,7 +19,7 @@ def sample_b_k(x_t, y_t, z, t, k, beta, sigma_beta, B):
     sub = np.matmul(sub, np.transpose(z_temp))
     y_hat = y_t - sub
     variance = np.linalg.inv(beta * np.matmul(np.transpose(x_hat), x_hat) + sigma_beta)
-    mean = np.transpose(np.matmul(variance, beta * np.matmul(np.transpose(x_hat), y_hat)))[0]
+    mean = np.transpose(np.matmul(variance, beta * np.matmul(np.transpose(x_hat), y_hat)))
     # return mean, variance
     # min_eig = np.min(np.real(np.linalg.eigvals(variance)))
     # if min_eig < 0:
@@ -32,7 +32,7 @@ def sample_z_t(x_t, y_t, z, t, k, beta, sigma_z, B):
     x_hat = np.matmul(x_t, np.transpose(B))
     print(x_hat)
     variance = np.linalg.inv(beta* np.matmul(np.transpose(x_hat), x_hat) + sigma_z)
-    mean = np.transpose(np.matmul(variance, beta * np.matmul(np.transpose(x_hat), y_t)))[0]
+    mean = np.transpose(np.matmul(variance, beta * np.matmul(np.transpose(x_hat), y_t)))
     print("mean", mean)
     return np.random.multivariate_normal(mean, variance)
     # print("reached here")
@@ -42,8 +42,8 @@ n = 3
 d = 2
 t = 4
 k = 5
-x_t = np.random.random((1,d))
-y_t = np.random.random((1,1))
+x_t = np.random.random((n,d))
+y_t = np.random.random((n,1))
 z = np.random.random((t,k))
 B = np.random.random((k,d))
 # print(x_t)
