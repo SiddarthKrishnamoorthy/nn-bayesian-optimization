@@ -1,4 +1,5 @@
 import numpy as np
+from copy import deepcopy
 
 #x_t: n x d
 # z: t x k
@@ -47,22 +48,38 @@ y = []
 for t1 in range(t):
     x.append(np.random.random((1,d)))
     y.append(np.random.random((1,1)))
-z = np.random.random((t,k))
-B = np.random.random((k,d))
-# print(x_t)
-# print(z)
-# print(B)
 sigma_beta = np.random.random((d,d))
 sigma_z = np.random.random((k,k))
-# print("b samples", sample_b_k(x_t, y_t, z, 2, 2, 1, sigma_beta, B))
-# print("z samples", sample_z_t(x_t, y_t, z, 2, 2, 1, sigma_z, B))
+samples_B = []
+samples_z = []
 for iteration in range(100):
+    z = np.random.random((t,k))
+    B = np.random.random((k,d))
     for t1 in range(t):
         x_t = x[t1]
         y_t = y[t1]
         for k1 in range(k):
-            B[k1] = sample_b_k(x_t, y_t, z, t1, k1, 1, sigma_beta, B)
-            # print(iteration)
+            B[k1] = sample_b_k(x_t, y_t, z, t1, k1, 1, sigma_beta, B) # Single input
         z[t1] =  sample_z_t(x_t, y_t, z, 1, sigma_z, B)
 
-# B[k1] = 
+    # Append new samples to list
+    samples_B.append(deepcopy(B))
+    samples_z.append(deepcopy(z))
+
+#print(len(samples_B))
+#print(len(samples_z))
+
+# Now for each t, set mu_t and sigma_t using the monte carlo samples from above
+w = B.T.dot(z.T)
+#print(.shape)
+x_pred = np.random.random((1,d))
+#print(w[:, 1].reshape((d,1)).T.dot(x_pred.T))
+#print(w.shape)
+for tno in range(t):
+    cum_mu = 0
+    for s in range(len(samples_B)):
+        w = samples_B[s].T.dot(samples_z[s].T)
+        cum_mu += w[:, 1].reshape((d,1)).T.dot(x_pred.T)[0]
+    print(cum_mu)
+#w_3 = B.T.dot(z[3])
+#print(w_3.dot(np.random.random((1,d)).T))
